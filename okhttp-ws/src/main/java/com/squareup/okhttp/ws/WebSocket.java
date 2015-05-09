@@ -29,6 +29,16 @@ public interface WebSocket {
     BINARY
   }
 
+  /** Describes why the Http request failed to upgrade to a web socket. */
+  enum UpgradeFailureReason {
+    /** The http response code was not 101 - https://tools.ietf.org/html/rfc6455#section-4.1. */
+    INVALID_RESPONSE_CODE,
+    /** The http [Connection:Upgrade] or [Upgrade:websocket] headers were missing. */
+    UPGRADE_HEADERS_MISSING,
+    /** The 'Sec-WebSocket-Accept' hash did not match the client hash. */
+    INVALID_SEC_ACCEPT_HASH
+  }
+
   /**
    * Stream a message payload to the server of the specified {code type}.
    * <p>
