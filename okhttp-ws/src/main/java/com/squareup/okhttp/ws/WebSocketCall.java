@@ -41,7 +41,7 @@ import okio.ByteString;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 import static com.squareup.okhttp.ws.WebSocket.UpgradeFailureReason.INVALID_RESPONSE_CODE;
-import static com.squareup.okhttp.ws.WebSocket.UpgradeFailureReason.UPGRADE_HEADERS_MISSING;
+import static com.squareup.okhttp.ws.WebSocket.UpgradeFailureReason.INVALID_UPGRADE_HEADERS;
 import static com.squareup.okhttp.ws.WebSocket.UpgradeFailureReason.INVALID_SEC_ACCEPT_HASH;
 
 public final class WebSocketCall {
@@ -152,13 +152,13 @@ public final class WebSocketCall {
 
     String headerConnection = response.header("Connection");
     if (!"Upgrade".equalsIgnoreCase(headerConnection)) {
-      listener.onUpgradeFailed(UPGRADE_HEADERS_MISSING, request, response);
+      listener.onUpgradeFailed(INVALID_UPGRADE_HEADERS, request, response);
       throw new ProtocolException(
           "Expected 'Connection' header value 'Upgrade' but was '" + headerConnection + "'");
     }
     String headerUpgrade = response.header("Upgrade");
     if (!"websocket".equalsIgnoreCase(headerUpgrade)) {
-      listener.onUpgradeFailed(UPGRADE_HEADERS_MISSING, request, response);
+      listener.onUpgradeFailed(INVALID_UPGRADE_HEADERS, request, response);
       throw new ProtocolException(
           "Expected 'Upgrade' header value 'websocket' but was '" + headerUpgrade + "'");
     }
