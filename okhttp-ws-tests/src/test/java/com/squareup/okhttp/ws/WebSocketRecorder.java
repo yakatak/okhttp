@@ -27,7 +27,6 @@ import okio.BufferedSource;
 
 import static com.squareup.okhttp.ws.WebSocket.PayloadType.BINARY;
 import static com.squareup.okhttp.ws.WebSocket.PayloadType.TEXT;
-import static com.squareup.okhttp.ws.WebSocket.UpgradeFailureReason;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -77,12 +76,6 @@ public final class WebSocketRecorder implements WebSocketReader.FrameCallback, W
     events.add(e);
   }
 
-  @Override
-  public void onUpgradeFailed(UpgradeFailureReason reason, Request request, Response response)
-      throws IOException {
-    events.add(new UpgradeFailure(reason, response.code()));
-  }
-
   private Object nextEvent() {
     try {
       Object event = events.poll(10, TimeUnit.SECONDS);
@@ -116,7 +109,7 @@ public final class WebSocketRecorder implements WebSocketReader.FrameCallback, W
   }
 
   public void assertClose(int code, String reason) {
-    assertEquals(new Close(code, reason), nextEvent());
+      assertEquals(new Close(code, reason), nextEvent());
   }
 
   public void assertFailure(Class<? extends IOException> cls, String message) {
@@ -126,10 +119,6 @@ public final class WebSocketRecorder implements WebSocketReader.FrameCallback, W
     assertNotNull(errorMessage, event);
     assertEquals(errorMessage, cls, event.getClass());
     assertEquals(errorMessage, cls.cast(event).getMessage(), message);
-  }
-
-  public void assertUpgradeFailure(UpgradeFailureReason reason, int responseCode) {
-    assertEquals(new UpgradeFailure(reason, responseCode), nextEvent());
   }
 
   public void assertExhausted() {
@@ -230,32 +219,6 @@ public final class WebSocketRecorder implements WebSocketReader.FrameCallback, W
       if (obj instanceof Close) {
         Close other = (Close) obj;
         return code == other.code && reason.equals(other.reason);
-      }
-      return false;
-    }
-  }
-
-  private static class UpgradeFailure {
-    public final UpgradeFailureReason reason;
-    public final int responseCode;
-
-    private UpgradeFailure(UpgradeFailureReason reason, int responseCode) {
-      this.reason = reason;
-      this.responseCode = responseCode;
-    }
-
-    @Override public String toString() {
-      return "UpgradeFailed[" + reason + " with response code: " + responseCode + "]";
-    }
-
-    @Override public int hashCode() {
-      return reason.ordinal() * 37 + responseCode;
-    }
-
-    @Override public boolean equals(Object obj) {
-      if (obj instanceof UpgradeFailure) {
-        UpgradeFailure other = (UpgradeFailure) obj;
-        return reason == other.reason && responseCode == other.responseCode;
       }
       return false;
     }
