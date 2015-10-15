@@ -56,4 +56,6 @@ public interface WebSocket {
    * @throws IllegalStateException if already closed.
    */
   void close(int code, String reason) throws IOException;
+
+  void close() throws IOException;
 }

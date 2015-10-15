@@ -194,7 +194,7 @@ public final class WebSocketCall {
       this.replyExecutor = replyExecutor;
     }
 
-    @Override protected void close() throws IOException {
+    @Override public void close() throws IOException {
       replyExecutor.shutdown();
       // TODO connection.closeIfOwnedBy(this);
       Internal.instance.closeIfOwnedBy(connection, this);
