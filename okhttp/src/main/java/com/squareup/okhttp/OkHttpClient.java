@@ -197,6 +197,7 @@ public class OkHttpClient implements Cloneable {
   private int connectTimeout = 10_000;
   private int readTimeout = 10_000;
   private int writeTimeout = 10_000;
+  private Integer socketSendBufferSize;
 
   public OkHttpClient() {
     routeDatabase = new RouteDatabase();
@@ -228,6 +229,7 @@ public class OkHttpClient implements Cloneable {
     this.connectTimeout = okHttpClient.connectTimeout;
     this.readTimeout = okHttpClient.readTimeout;
     this.writeTimeout = okHttpClient.writeTimeout;
+    this.socketSendBufferSize = okHttpClient.socketSendBufferSize;
   }
 
   /**
@@ -445,6 +447,7 @@ public class OkHttpClient implements Cloneable {
     this.connectionPool = connectionPool;
     return this;
   }
+
 
   public ConnectionPool getConnectionPool() {
     return connectionPool;
@@ -675,6 +678,18 @@ public class OkHttpClient implements Cloneable {
       }
     }
     return defaultSslSocketFactory;
+  }
+
+  /**
+   * Attempts to set the SO_SNDBUF size of sockets configured using this client.
+   * Will fail silently if buffer size can't be set
+   */
+  public void setSocketSendBufferSize(int size) {
+    this.socketSendBufferSize = size;
+  }
+
+  public Integer getSocketSendBufferSize() {
+    return this.socketSendBufferSize;
   }
 
   /** Returns a shallow copy of this OkHttpClient. */

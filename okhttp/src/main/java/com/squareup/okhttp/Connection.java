@@ -31,6 +31,7 @@ import com.squareup.okhttp.internal.tls.OkHostnameVerifier;
 import java.io.IOException;
 import java.net.Proxy;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownServiceException;
 import java.security.cert.X509Certificate;
 import java.util.List;
@@ -370,6 +371,12 @@ public final class Connection {
         client.getConnectionPool().share(this);
       }
       client.routeDatabase().connected(getRoute());
+      if (client.getSocketSendBufferSize() != null) {
+        try {
+          socket.setSendBufferSize(client.getSocketSendBufferSize());
+        } catch (SocketException ignored) {
+        }
+      }
     }
 
     setTimeouts(client.getReadTimeout(), client.getWriteTimeout());
