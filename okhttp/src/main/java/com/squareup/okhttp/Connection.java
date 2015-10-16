@@ -369,6 +369,12 @@ public final class Connection {
       if (isFramed()) {
         client.getConnectionPool().share(this);
       }
+      if (client.getSocketSendBufferSize() != null) {
+        try {
+          getSocket().setSendBufferSize(client.getSocketSendBufferSize());
+        } catch (Exception ignored) {
+        }
+      }
       client.routeDatabase().connected(getRoute());
     }
 
