@@ -194,7 +194,7 @@ public final class WebSocketCall {
       this.connection = connection;
     }
 
-    @Override protected void closeConnection() throws IOException {
+    @Override public void closeConnection() throws IOException {
       // TODO connection.closeIfOwnedBy(this);
       Internal.instance.closeIfOwnedBy(connection, this);
     }

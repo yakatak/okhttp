@@ -375,6 +375,12 @@ public final class Connection {
         } catch (Exception ignored) {
         }
       }
+      if (client.getSocketReceiveBufferSize() != null) {
+        try {
+          getSocket().setReceiveBufferSize(client.getSocketReceiveBufferSize());
+        } catch (Exception ignored) {
+        }
+      }
       client.routeDatabase().connected(getRoute());
     }
 

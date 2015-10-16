@@ -185,5 +185,5 @@ public abstract class RealWebSocket implements WebSocket {
   }
 
   /** Perform any tear-down work on the connection (close the socket, recycle, etc.). */
-  protected abstract void closeConnection() throws IOException;
+  public abstract void closeConnection() throws IOException;
 }

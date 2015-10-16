@@ -191,6 +191,7 @@ public class OkHttpClient implements Cloneable {
   private int readTimeout = 10_000;
   private int writeTimeout = 10_000;
   private Integer socketSendBufferSize;
+  private Integer socketReceiveBufferSize;
 
   public OkHttpClient() {
     routeDatabase = new RouteDatabase();
@@ -470,8 +471,16 @@ public class OkHttpClient implements Cloneable {
     this.socketSendBufferSize = size;
   }
 
+  public void setSocketReceiveBufferSize(int size) {
+    this.socketReceiveBufferSize = size;
+  }
+
   public Integer getSocketSendBufferSize() {
     return this.socketSendBufferSize;
+  }
+
+  public Integer getSocketReceiveBufferSize() {
+    return this.socketReceiveBufferSize;
   }
 
   public boolean getFollowRedirects() {
