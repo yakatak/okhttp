@@ -129,8 +129,11 @@ public abstract class RealWebSocket implements WebSocket {
     }
 
     BufferedSink sink = Okio.buffer(writer.newMessageSink(formatOpcode));
-    message.writeTo(sink);
-    sink.close();
+    try {
+      message.writeTo(sink);
+    } finally {
+      sink.close();
+    }
   }
 
   @Override public void sendPing(Buffer payload) throws IOException {
